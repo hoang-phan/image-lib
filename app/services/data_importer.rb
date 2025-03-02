@@ -13,7 +13,7 @@ class DataImporter
       rating = filename.split('-')[1]
       records = []
 
-      # drive.get_file(file.id, download_dest: file.name)
+      drive.get_file(file.id, download_dest: file.name)
       Zip::File.open(filename) do |zip|
         zip.each do |entry|
           id = File.basename(entry.name, '.jpg')
