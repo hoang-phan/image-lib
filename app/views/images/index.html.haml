@@ -1,0 +1,51 @@
+= link_to "#", class: "main", onclick: "location.reload(); return false" do
+  - if @image.present?
+    = image_tag @image.path.split("/").last
+.rating
+  = link_to AppConfig.get("minrate"), set_config_images_path(name: "minrate"), data: { turbo_method: :post }, class: "range", id: "min-rate"
+  %span= @count
+  = link_to AppConfig.get("maxrate"), set_config_images_path(name: "maxrate"), data: { turbo_method: :post }, class: "range", id: "max-rate"
+  - if @image.present?
+    - 1.upto(5) do |star|
+      = link_to rate_image_path(@image, rating: star), data: { turbo_method: :post }, class: "rate", id: "rate-#{star}" do
+        - if star > @image.rating.to_i
+          = image_tag "star2.png"
+        - else
+          = image_tag "star1.png"
+  = link_to new_image_path, class: "rate", id: "new-image" do
+    = image_tag "add.png"
+  = link_to reset_images_path, data: { turbo_method: :post }, class: "rate" do
+    = image_tag "reset.png"
+  - if @image.present?
+    = link_to @image, data: { turbo_confirm: "Sure?", turbo_method: :delete }, class: "rate", id: "delete-image" do
+      = image_tag "delete.png"
+
+:javascript
+  if (!window.handleKey) {
+    window.handleKey = (e) => {
+      console.log(e.code);
+      switch(e.code) {
+      case "Delete":
+        document.querySelector("#delete-image").click();
+        break;
+      case "Digit1":
+      case "Digit2":
+      case "Digit3":
+      case "Digit4":
+      case "Digit5":
+        document.querySelector("#rate-" + e.code[5]).click();
+        break;
+      case "ArrowRight":
+        location.reload();
+        break;
+      case "ArrowUp":
+        document.querySelector("#min-rate").click();
+        break;
+      case "KeyN":
+        document.querySelector("#new-image").click();
+        break;
+      }
+      return false;
+    };
+    document.addEventListener('keyup', handleKey);
+  }
