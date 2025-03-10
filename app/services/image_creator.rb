@@ -37,12 +37,12 @@ class ImageCreator
   end
 
   def save_file
-    image.update_columns extension:
-    File.open(image.reload.path, "wb") do |f|
+    image.update_columns(extension:)
+    File.open(image.path, "wb") do |f|
       f << file_content
     end
     ImageConverter.new(image).call
-    ImageMetadataUpdater.new(image.reload).call
-    FindSimilarImage.new(image.reload).call
+    ImageMetadataUpdater.new(image).call
+    FindSimilarImage.new(image).call
   end
 end

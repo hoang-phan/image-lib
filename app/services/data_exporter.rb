@@ -15,7 +15,7 @@ class DataExporter
         paths = Image.where(rating:).order(:id).offset(offset).limit(BATCH_SIZE).map(&:path).join(' ')
         break if paths.blank?
         filename = "imagelib-#{rating}-#{offset}.zip"
-        `zip -P ImageLib #{filename} #{paths}`
+        `zip -P #{ENV['ZIP_PASSWORD']} #{filename} #{paths}`
         metadata = Google::Apis::DriveV3::File.new(name: filename)
         metadata = drive.create_file(metadata, upload_source: filename, content_type: 'application/zip')
         offset += BATCH_SIZE

@@ -4,12 +4,13 @@ class ImagesController < ApplicationController
   # GET /images or /images.json
   def index
     scope = Image
-      .where.not(extension: [nil, ""])
+      .where.not(size: [0, nil])
       .where('rating >= ?', AppConfig.get("minrate"))
       .where('rating <= ?', AppConfig.get("maxrate"))
-    @image = scope
-      .order(:views, :rating, "random()").first
     @count = scope.count
+    scope = scope.order(:views, :rating)
+    scope = ENV['RANDOMIZED'].present? ? scope.order("random()") : scope.order(:id)
+    @image = scope.first
     if @image.present?
       current_views = @image.views
       if current_views > 100
@@ -23,6 +24,7 @@ class ImagesController < ApplicationController
 
   def multiple
     @images = Image.where(id: params[:ids].split(","))
+    @per_row = [@images.count, 8].min
   end
 
   # GET /images/new

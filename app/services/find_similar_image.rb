@@ -23,13 +23,9 @@ class FindSimilarImage
       diff = `compare -metric RMSE #{image.path} #{img.path} NULL 2>&1`.strip.to_f
       
       if diff <= DIFF_THRESHOLD
-        similar = img
-        break
+        image.destroy
+        return
       end
-    end
-
-    if similar
-      image.update_columns similar_ids:
     end
   end
 

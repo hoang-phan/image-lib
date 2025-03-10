@@ -21,7 +21,7 @@ class DataImporter
         end
       end
 
-      `unzip -P ImageLib #{filename}`
+      `unzip -P #{ENV['ZIP_PASSWORD']} #{filename}`
     end
 
     `rm -rf imagelib-*.zip`

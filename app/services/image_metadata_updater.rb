@@ -9,7 +9,7 @@ class ImageMetadataUpdater
     k_val, width, height = `convert #{image.path} -format "%k %w %h" info:`.split(" ")
     avg_r, avg_g, avg_b, avg_a = `convert #{image.path} -resize 1x1 -format "#{avg_format}" info:-`.split(" ")
     size = File.size(image.path)
-    image.update_columns size:, k_val:, width:, height:, avg_r:, avg_g:, avg_b:, avg_a:
+    image.update_columns(size:, k_val:, width:, height:, avg_r:, avg_g:, avg_b:, avg_a:)
   end
 
   private

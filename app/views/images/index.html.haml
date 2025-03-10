@@ -1,5 +1,7 @@
 = link_to "#", class: "main", onclick: "location.reload(); return false" do
   - if @image.present?
+    - if ENV["DEBUG"].present?
+      %strong= @image.id
     = image_tag @image.path.split("/").last
 .rating
   = link_to AppConfig.get("minrate"), set_config_images_path(name: "minrate"), data: { turbo_method: :post }, class: "range", id: "min-rate"

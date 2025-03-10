@@ -1,3 +1,5 @@
-%div{ style: 'display: flex' }
+%div{ style: "display: flex; width: 100%; flex-wrap: wrap;" }
   - @images.each do |image|
-    = image_tag image.path.split("/").last, style: "max-width: #{100 / @images.size}%; max-height: 90vh"
+    %div{ style: "display: flex; flex-direction: column; width: #{100 / @per_row}%; text-align: center" }
+      %strong= image.id
+      = image_tag image.path.split("/").last, style: "max-width: 100%; max-height: 90vh"
